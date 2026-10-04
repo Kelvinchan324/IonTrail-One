@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://kelvinchan324.github.io/IonTrail-One/"><strong>Product page</strong></a> ·
+  <a href="docs/index.html"><strong>Product-page source</strong></a> ·
   <a href="docs/quickstart.md">SDK quick start</a> ·
   <a href="docs/hardware.md">Hardware architecture</a> ·
   <a href="docs/customization.md">Customization guide</a>
@@ -132,6 +132,8 @@ IonTrail-One/
 ├── CONTRIBUTING.md          Contribution workflow
 └── LICENSE                  MIT SDK licence
 ```
+
+The static product site is ready in `docs/`. To publish it at `kelvinchan324.github.io/IonTrail-One`, enable **Settings → Pages → Build and deployment → GitHub Actions** once; the included workflow handles later deployments.
 
 ## Safety boundary
 
