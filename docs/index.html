@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="IonTrail One is a pocketable, open SDK environmental radiation counter with temperature and humidity sensing.">
+  <meta name="theme-color" content="#191a18">
+  <title>IonTrail One — see the invisible environment</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="hero" id="top">
+    <nav aria-label="Main navigation">
+      <a class="wordmark" href="#top">IONTRAIL <span>ONE</span></a>
+      <div class="navlinks">
+        <a href="#product">Product</a>
+        <a href="#sdk">Open SDK</a>
+        <a href="#hardware">Hardware</a>
+        <a href="https://github.com/Kelvinchan324/IonTrail-One">GitHub ↗</a>
+      </div>
+    </nav>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">POCKET SCIENCE / OPEN SDK</p>
+        <h1>Carry curiosity<br><em>with you.</em></h1>
+        <p class="lead">A river-pebble radiation counter that makes the invisible environment tangible—then gives you the tools to build on it.</p>
+        <div class="actions">
+          <a class="button primary" href="quickstart.md">Start customizing</a>
+          <a class="button" href="#product">Explore the concept</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <img src="assets/iontrail-concepts.png" alt="Industrial design study for the IonTrail One pebble-shaped radiation counter">
+        <figcaption>Selected direction: a soft river-pebble form with a smoked transparent back.</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="product">
+      <p class="eyebrow">DESIGNED TO TRAVEL</p>
+      <h2>A small object with<br>a serious purpose.</h2>
+      <div class="cards three">
+        <article><span>01</span><h3>Visible by design</h3><p>A smoked polycarbonate back reveals the tube and ordered electronics while an opaque internal guard keeps high voltage inaccessible.</p></article>
+        <article><span>02</span><h3>Context, not clutter</h3><p>CPM/CPS is the primary output. Temperature and humidity add context to experiments and logged observations.</p></article>
+        <article><span>03</span><h3>Ready for a bag</h3><p>A structural chassis loop takes a mini carabiner while compliant tube supports protect the detector from everyday knocks.</p></article>
+      </div>
+      <div class="spec-strip">
+        <div><strong>ESP32-C3</strong><small>planned controller</small></div>
+        <div><strong>GM tube</strong><small>direct count events</small></div>
+        <div><strong>SHT40</strong><small>temperature + RH</small></div>
+        <div><strong>BLE + USB-C</strong><small>connection and power</small></div>
+      </div>
+    </section>
+
+    <section class="section dark" id="sdk">
+      <div class="section-split">
+        <div>
+          <p class="eyebrow">OPEN SDK</p>
+          <h2>Your instrument.<br>Your experiment.</h2>
+        </div>
+        <div class="feature-copy">
+          <p>IonTrail One is planned as a product customers can understand and extend. The public Arduino/PlatformIO SDK provides a stable pulse-counting core and straightforward access to measurement data.</p>
+          <ul>
+            <li>Create new screens, icons, languages and themes</li>
+            <li>Change sound, LED and notification behavior</li>
+            <li>Add BLE services, logging and companion apps</li>
+            <li>Integrate compatible I2C environmental sensors</li>
+            <li>Build tube-specific, traceable calibration profiles</li>
+          </ul>
+          <a class="text-link" href="customization.md">Read the customization guide →</a>
+        </div>
+      </div>
+      <pre class="code-card"><code>#include &lt;IonTrail.h&gt;
+
+IonTrailDevice detector;
+
+void loop() {
+  detector.update();
+  if (detector.hasFreshReading()) {
+    Serial.printf("%.1f CPM\n", detector.cpm());
+  }
+}</code></pre>
+    </section>
+
+    <section class="section" id="hardware">
+      <p class="eyebrow">PLANNED ARCHITECTURE</p>
+      <h2>Prototype openly.<br>Engineer responsibly.</h2>
+      <div class="architecture" aria-label="Hardware signal flow">
+        <div class="node accent">USB-C + protected LiPo</div><div class="arrow">→</div>
+        <div class="node">Power path + 3.3 V</div><div class="arrow">→</div>
+        <div class="node">ESP32-C3</div>
+        <div class="branch">
+          <div class="node">OLED + SHT40</div>
+          <div class="node">Regulated GM HV + protected pulse input</div>
+        </div>
+      </div>
+      <p class="note">Development modules make EVT fast. A consumer revision should consolidate the design onto a custom PCB with traceable components, protected charging, controlled high voltage, test points, and a mechanically inaccessible HV shield.</p>
+      <div class="actions lower">
+        <a class="button primary" href="hardware.md">Hardware plan</a>
+        <a class="button" href="bom.md">Prototype BOM + Taobao searches</a>
+      </div>
+    </section>
+
+    <section class="section safety">
+      <p class="eyebrow">AN HONEST INSTRUMENT</p>
+      <h2>Count first.<br>Claim carefully.</h2>
+      <p>IonTrail One is an educational and environmental-monitoring project. It is not a certified dosimeter, medical device, contamination survey meter, or proof that an environment is safe. Dose estimates require tube-specific, instrument-level calibration and visible uncertainty.</p>
+      <a class="text-link dark-link" href="safety.md">Safety, calibration and product claims →</a>
+    </section>
+
+    <section class="cta">
+      <p class="eyebrow">BUILD WITH IONTRAIL</p>
+      <h2>Follow the trail.</h2>
+      <p>The repository is the future customer SDK, hardware reference and development log.</p>
+      <a class="button primary" href="https://github.com/Kelvinchan324/IonTrail-One">View the project on GitHub ↗</a>
+    </section>
+  </main>
+
+  <footer><span>IonTrail One — concept / EVT planning</span><span>Specifications remain subject to validation.</span></footer>
+</body>
+</html>
