@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Meet IonTrail One, a pocket environmental radiation counter with an open SDK for learning, experiments and custom applications.">
+  <meta name="theme-color" content="#11110f">
+  <title>IonTrail One — See the invisible environment</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%2311110f'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ff8a35'/%3E%3Cpath d='M32 9v11M32 44v11M9 32h11M44 32h11' stroke='%23f4f0e7' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="IonTrail One home">
+      <span class="brand-mark" aria-hidden="true"><i></i></span>
+      <span>IONTRAIL <b>ONE</b></span>
+    </a>
+    <button class="menu-button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="#product">Product</a>
+      <a href="#inside">Inside</a>
+      <a href="#sdk">Open SDK</a>
+      <a href="#status">Status</a>
+      <a class="nav-cta" href="https://github.com/Kelvinchan324/IonTrail-One">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy reveal">
+        <p class="kicker"><span></span> Concept / EVT development</p>
+        <h1>See what the air<br><em>doesn’t show.</em></h1>
+        <p class="hero-lead">IonTrail One is a pocket environmental radiation counter shaped like a river pebble—made for curious people, open experiments and everyday carry.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#product">Explore IonTrail One</a>
+          <a class="button button-ghost" href="https://github.com/Kelvinchan324/IonTrail-One">Build with the SDK</a>
+        </div>
+        <dl class="hero-facts" aria-label="Core platform">
+          <div><dt>Detector</dt><dd>Geiger–Müller tube</dd></div>
+          <div><dt>Platform</dt><dd>ESP32-C3</dd></div>
+          <div><dt>Context</dt><dd>Temperature + RH</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="IonTrail One industrial design concept">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="product-frame">
+          <img src="assets/iontrail-concepts.png" alt="Three industrial design concepts, including the selected river-pebble enclosure">
+          <span class="selection-tag">Selected direction · River Pebble</span>
+        </div>
+        <div class="signal-card" aria-hidden="true">
+          <span>LIVE COUNT</span><strong>18</strong><small>CPM</small>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto section" id="product">
+      <div class="section-label">01 / THE OBJECT</div>
+      <div class="manifesto-grid">
+        <h2>Science equipment<br>you’ll want to carry.</h2>
+        <div class="large-copy">
+          <p>The long detector tube sets the proportions. Everything else curves around it: a compact screen, simple controls, and a structural loop for a bag or lanyard.</p>
+          <p>A smoked transparent back reveals the low-voltage electronics and the tube, while a separate opaque guard keeps the high-voltage zone out of reach.</p>
+        </div>
+      </div>
+      <div class="principles">
+        <article><span class="principle-icon">◌</span><h3>Readable</h3><p>Count rate stays primary, with plain language and no unsupported “safe” judgement.</p></article>
+        <article><span class="principle-icon">◇</span><h3>Carryable</h3><p>A pebble profile, protected display and load-bearing attachment point suit daily use.</p></article>
+        <article><span class="principle-icon">⌁</span><h3>Open</h3><p>The customer SDK exposes measurements and extension points instead of hiding them.</p></article>
+      </div>
+    </section>
+
+    <section class="demo-section" aria-labelledby="demo-title">
+      <div class="demo-copy">
+        <p class="kicker light"><span></span> A measurement you can inspect</p>
+        <h2 id="demo-title">Count first.<br>Interpret carefully.</h2>
+        <p>IonTrail records individual GM pulses and turns a sampling window into CPM. Environmental readings add context, while raw counts remain available for experiments and export.</p>
+        <div class="mode-switch" role="group" aria-label="Measurement display mode">
+          <button class="active" data-mode="cpm">CPM</button>
+          <button data-mode="cps">CPS</button>
+        </div>
+      </div>
+
+      <div class="instrument" aria-live="polite">
+        <div class="instrument-top"><span>IONTRAIL ONE</span><span class="battery">87%</span></div>
+        <div class="reading"><strong id="reading-value">18</strong><span id="reading-unit">CPM</span></div>
+        <div class="spark" id="spark" aria-hidden="true"></div>
+        <div class="instrument-meta">
+          <div><span>Temperature</span><strong>24.6°C</strong></div>
+          <div><span>Humidity</span><strong>58% RH</strong></div>
+          <div><span>Window</span><strong>10 sec</strong></div>
+        </div>
+        <p>Illustrative interface — not live sensor data</p>
+      </div>
+    </section>
+
+    <section class="section inside" id="inside">
+      <div class="section-label">02 / INSIDE</div>
+      <div class="inside-heading">
+        <h2>Built around the detector.</h2>
+        <p>The first prototype uses accessible modules to learn quickly. A sellable revision moves to one controlled PCB with traceable power, charging and high-voltage protection.</p>
+      </div>
+      <ol class="architecture">
+        <li><span>01</span><div><strong>Protected power</strong><small>USB-C, one-cell LiPo, charging and regulated 3.3 V</small></div></li>
+        <li><span>02</span><div><strong>ESP32-C3 core</strong><small>Count processing, display, logging and Bluetooth Low Energy</small></div></li>
+        <li><span>03</span><div><strong>Environmental context</strong><small>SHT40 temperature and relative-humidity sensing</small></div></li>
+        <li><span>04</span><div><strong>GM detector path</strong><small>Regulated high voltage, current limiting and protected pulse input</small></div></li>
+      </ol>
+      <div class="engineering-note">
+        <span class="note-mark">!</span>
+        <p><strong>Transparent, not exposed.</strong> The visible construction is part of the design, but the high-voltage region remains mechanically guarded and inaccessible.</p>
+        <a href="https://github.com/Kelvinchan324/IonTrail-One/blob/main/docs/hardware.md">Read the hardware plan</a>
+      </div>
+    </section>
+
+    <section class="sdk-section" id="sdk">
+      <div class="sdk-copy">
+        <div class="section-label light-label">03 / OPEN SDK</div>
+        <h2>Make it<br>your instrument.</h2>
+        <p>IonTrail One is also a development platform. The Arduino/PlatformIO SDK keeps time-critical pulse counting small and exposes the data customers need to build new experiences.</p>
+        <ul>
+          <li>Custom screens, languages and themes</li>
+          <li>Sound, LED and notification behavior</li>
+          <li>BLE services and companion applications</li>
+          <li>CSV/JSON logging and classroom experiments</li>
+          <li>Tube-specific calibration profiles</li>
+        </ul>
+        <a class="button button-light" href="https://github.com/Kelvinchan324/IonTrail-One">Open the SDK on GitHub</a>
+      </div>
+      <div class="code-window" aria-label="IonTrail SDK code example">
+        <div class="code-bar"><span></span><span></span><span></span><small>main.cpp</small></div>
+        <pre><code><i>#include</i> &lt;IonTrail.h&gt;
+
+IonTrailDevice detector;
+
+<b>void</b> setup() {
+  IonTrailConfig config;
+  config.gmPulsePin = 3;
+  config.sampleWindowMs = 10000;
+  detector.begin(config);
+}
+
+<b>void</b> loop() {
+  detector.update();
+  <b>if</b> (detector.hasFreshReading()) {
+    Serial.printf(<q>"%.1f CPM\n"</q>,
+                  detector.cpm());
+  }
+}</code></pre>
+        <div class="code-output"><span>serial / output</span><strong>18.0 CPM</strong></div>
+      </div>
+    </section>
+
+    <section class="section status" id="status">
+      <div class="section-label">04 / DEVELOPMENT</div>
+      <div class="status-intro">
+        <h2>An open trail<br>to the first unit.</h2>
+        <p>IonTrail One is currently a concept and EVT project. Sharing progress openly keeps product claims grounded in test evidence.</p>
+      </div>
+      <div class="timeline">
+        <article class="current"><span>Now</span><h3>EVT prototype</h3><p>Compare tubes, validate pulse electronics, refine the pebble envelope and establish baseline power behavior.</p></article>
+        <article><span>Next</span><h3>Integrated hardware</h3><p>Consolidate the module stack onto a custom PCB and build production-oriented enclosure prototypes.</p></article>
+        <article><span>Validate</span><h3>Characterization</h3><p>Measure radiation response, charging, thermal behavior, EMC, drop resistance and attachment loads.</p></article>
+        <article><span>Then</span><h3>Pilot units</h3><p>Prepare controlled small-batch manufacturing, user documentation and market-specific compliance review.</p></article>
+      </div>
+    </section>
+
+    <section class="claims">
+      <div><span>Important boundary</span><h2>Curiosity without<br>false reassurance.</h2></div>
+      <p>IonTrail One is planned for education and environmental monitoring. It is not a certified personal dosimeter, medical device, contamination survey meter, or proof that an environment is safe. Dose-rate estimates require tube-specific, instrument-level calibration with documented uncertainty.</p>
+      <a href="https://github.com/Kelvinchan324/IonTrail-One/blob/main/docs/safety.md">Safety and calibration notes</a>
+    </section>
+
+    <section class="final-cta">
+      <div class="trail" aria-hidden="true"></div>
+      <p class="kicker"><span></span> Follow the development</p>
+      <h2>The invisible world<br>leaves a trail.</h2>
+      <p>Explore the firmware, hardware plan and customization guides in the open repository.</p>
+      <a class="button button-primary" href="https://github.com/Kelvinchan324/IonTrail-One">View IonTrail One on GitHub</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><i></i></span><span>IONTRAIL <b>ONE</b></span></div>
+    <p>Concept / EVT development. Specifications remain subject to validation.</p>
+    <div><a href="https://github.com/Kelvinchan324/IonTrail-One">GitHub</a><a href="https://github.com/Kelvinchan324/IonTrail-One/blob/main/LICENSE">MIT License</a></div>
+  </footer>
+</body>
+</html>
+
