@@ -1,3 +1,33 @@
+## EVT-A build and teaching manual (5 October 2026)
+
+The runnable draft is a **USB-powered ESP32-C3 counter with a guarded SEN0463,
+SHT40 and SSD1306 display**. Its 170 x 100 mm bench fixture is a development step;
+the pocket battery product below remains a future design.
+
+[Engineering manual](docs/engineering.md) · [BOM](hardware/BOM.md) ·
+[Wiring schematic](hardware/schematic.svg) · [Placement drawing](mechanical/placement.svg) ·
+[STEP draft](mechanical/layout-draft.step)
+
+1. Confirm the exact C3 board, OLED pin order and 3.3 V signal levels against the
+   engineering manual. Keep the detector guard closed. Do the first test with
+   the detector disconnected and injected low-voltage pulses only.
+2. Install PlatformIO, then run `pio run`, `pio run --target upload`, and
+   `pio device monitor` at 115200 baud.
+3. The screen starts at WAIT and reports CPM after ten seconds. A missing screen
+   or environmental sensor should not prevent serial counting.
+4. Supply 10 Hz pulses from a separate 3.3 V fixture through 1k into GPIO3.
+   Collect at least three full windows and run
+   `python tools/check_log.py capture.csv --hz 10`. Expect about 600 CPM.
+5. Power off, remove the fixture, then connect the detector's low-voltage output.
+   Record natural background counts. Hold the count-reset button for two seconds
+   to clear totals; the next full measurement again takes ten seconds.
+6. Complete the five lessons in the engineering manual before changing hardware.
+
+The software emits CSV count/environment readings. It does not measure calibrated
+dose, certify a safe environment or prove sensor health when counts are zero.
+The CAD is a guarded-module packaging draft. Battery, custom HV board and final
+pocket enclosure work are not complete.
+
 <p align="center">
   <img src="docs/assets/iontrail-concepts.png" alt="IonTrail One enclosure study" width="920">
 </p>

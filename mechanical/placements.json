@@ -1,0 +1,147 @@
+{
+  "units": "mm",
+  "frame": "plate centre XY; top of bench Z=0; +X forward; +Y left; +Z up",
+  "status": "assumed bounding envelopes unless cited otherwise",
+  "components": [
+    {
+      "ref": "U1",
+      "name": "ESP32-C3 SuperMini module",
+      "qty": 1,
+      "selection": "Provisional board revision; verify pins before assembly",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "USB": "USB_HOST",
+        "5V": "USB_5V",
+        "GND": "GND",
+        "GPIO3": "COUNT_IN",
+        "GPIO4": "SDA",
+        "GPIO5": "SCL",
+        "GPIO0": "RESET_BTN",
+        "GPIO7": "LED_ANODE"
+      },
+      "position": [
+        -52,
+        25,
+        12
+      ],
+      "size": [
+        26,
+        19,
+        15
+      ]
+    },
+    {
+      "ref": "U2",
+      "name": "AP2112K-3.3 LDO on breakout",
+      "qty": 1,
+      "selection": "Auxiliary sensors only; do not join to MCU 3V3 output",
+      "source": "[Diodes AP2112](https://www.diodes.com/part/view/AP2112/)",
+      "pins": {
+        "1 VIN": "USB_5V",
+        "2 GND": "GND",
+        "3 EN": "USB_5V",
+        "4 NC": "NC",
+        "5 VOUT": "AUX_3V3"
+      },
+      "position": [
+        -20,
+        30,
+        10
+      ],
+      "size": [
+        20,
+        16,
+        12
+      ]
+    },
+    {
+      "ref": "U3",
+      "name": "DFRobot SEN0463 guarded detector",
+      "qty": 1,
+      "selection": "107 x 42 mm board; larger guard envelope assumed",
+      "source": "[DFRobot SEN0463](https://wiki.dfrobot.com/sen0463/)",
+      "pins": {
+        "-": "GND",
+        "+": "AUX_3V3",
+        "D": "PULSE_MODULE"
+      },
+      "position": [
+        10,
+        -20,
+        19
+      ],
+      "size": [
+        115,
+        48,
+        28
+      ]
+    },
+    {
+      "ref": "U4",
+      "name": "SHT40 Adafruit breakout",
+      "qty": 1,
+      "selection": "Address 0x44; vented end; envelope assumed",
+      "source": "[Adafruit SHT40](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/pinouts)",
+      "pins": {
+        "VIN": "AUX_3V3",
+        "GND": "GND",
+        "SDA": "SDA",
+        "SCL": "SCL"
+      },
+      "position": [
+        64,
+        32,
+        10
+      ],
+      "size": [
+        22,
+        18,
+        10
+      ]
+    },
+    {
+      "ref": "U5",
+      "name": "SSD1306 128x64 I2C OLED",
+      "qty": 1,
+      "selection": "Select 3.3 V compatible module at 0x3C; verify pin order",
+      "source": "[Adafruit SSD1306 library](https://github.com/adafruit/Adafruit_SSD1306)",
+      "pins": {
+        "VCC": "AUX_3V3",
+        "GND": "GND",
+        "SDA": "SDA",
+        "SCL": "SCL"
+      },
+      "position": [
+        22,
+        26,
+        12
+      ],
+      "size": [
+        30,
+        28,
+        12
+      ]
+    },
+    {
+      "ref": "S1",
+      "name": "Momentary reset-count button",
+      "qty": 1,
+      "selection": "Firmware: hold two seconds; internal pull-up",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "RESET_BTN",
+        "2": "GND"
+      },
+      "position": [
+        -71,
+        0,
+        12
+      ],
+      "size": [
+        10,
+        10,
+        12
+      ]
+    }
+  ]
+}

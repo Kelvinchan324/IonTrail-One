@@ -4,8 +4,11 @@ IonTrailDevice* IonTrailDevice::activeInstance_ = nullptr;
 
 bool IonTrailDevice::begin(const IonTrailConfig& config) {
   if (config.gmPulsePin < 0 || config.sampleWindowMs == 0) return false;
+  if (activeInstance_ && activeInstance_ != this) return false;
+  if (activeInstance_ == this) detachInterrupt(digitalPinToInterrupt(config_.gmPulsePin));
 
   config_ = config;
+  resetTotals();
   pinMode(config_.gmPulsePin, INPUT_PULLUP);
   windowStartedMs_ = millis();
   activeInstance_ = this;
@@ -45,9 +48,12 @@ bool IonTrailDevice::hasFreshReading() {
 void IonTrailDevice::resetTotals() {
   portENTER_CRITICAL(&pulseMux_);
   pendingPulses_ = 0;
+  lastPulseMicros_ = 0;
   portEXIT_CRITICAL(&pulseMux_);
   totalCounts_ = 0;
   cpm_ = 0.0f;
+  freshReading_ = false;
+  lastWindowMs_ = 0;
   windowStartedMs_ = millis();
 }
 

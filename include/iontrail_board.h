@@ -13,6 +13,8 @@ constexpr int kStatusLedPin = 7;
 constexpr int kButtonPrimaryPin = 0;
 constexpr int kButtonBackPin = 1;
 constexpr int kButtonNextPin = 10;
-constexpr int kBatteryAdcPin = 2;
+// EVT-A has no internal battery; GPIO2 is a boot strap and left unused.
+constexpr int kBatteryAdcPin = -1;
+constexpr int kDisplayAddress = 0x3C;
 }  // namespace IonTrailBoard
 

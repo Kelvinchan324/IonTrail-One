@@ -1,0 +1,245 @@
+{
+  "title": "IonTrail One EVT-A",
+  "cad_name": "IonTrail_EVT_A",
+  "scope": "USB-powered educational bench instrument using intact guarded SEN0463. No internal battery or custom high-voltage circuitry.",
+  "plate": [
+    170,
+    100,
+    4
+  ],
+  "fixture_holes": [
+    [
+      -78,
+      -43
+    ],
+    [
+      78,
+      -43
+    ],
+    [
+      -78,
+      43
+    ],
+    [
+      78,
+      43
+    ]
+  ],
+  "fixture_hole_d": 3.4,
+  "components": [
+    {
+      "ref": "U1",
+      "name": "ESP32-C3 SuperMini module",
+      "qty": 1,
+      "selection": "Provisional board revision; verify pins before assembly",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "USB": "USB_HOST",
+        "5V": "USB_5V",
+        "GND": "GND",
+        "GPIO3": "COUNT_IN",
+        "GPIO4": "SDA",
+        "GPIO5": "SCL",
+        "GPIO0": "RESET_BTN",
+        "GPIO7": "LED_ANODE"
+      },
+      "position": [
+        -52,
+        25,
+        12
+      ],
+      "size": [
+        26,
+        19,
+        15
+      ]
+    },
+    {
+      "ref": "J1",
+      "name": "USB data and 5 V cable",
+      "qty": 1,
+      "selection": "Prototype selection; bench verification required",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "USB": "USB_HOST",
+        "GND": "GND"
+      }
+    },
+    {
+      "ref": "U2",
+      "name": "AP2112K-3.3 LDO on breakout",
+      "qty": 1,
+      "selection": "Auxiliary sensors only; do not join to MCU 3V3 output",
+      "source": "[Diodes AP2112](https://www.diodes.com/part/view/AP2112/)",
+      "pins": {
+        "1 VIN": "USB_5V",
+        "2 GND": "GND",
+        "3 EN": "USB_5V",
+        "4 NC": "NC",
+        "5 VOUT": "AUX_3V3"
+      },
+      "position": [
+        -20,
+        30,
+        10
+      ],
+      "size": [
+        20,
+        16,
+        12
+      ]
+    },
+    {
+      "ref": "C1",
+      "name": "10 uF ceramic / >=10 V",
+      "qty": 1,
+      "selection": "Prototype selection; bench verification required",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "USB_5V",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "C2",
+      "name": "10 uF ceramic / >=10 V",
+      "qty": 1,
+      "selection": "Prototype selection; bench verification required",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "AUX_3V3",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "U3",
+      "name": "DFRobot SEN0463 guarded detector",
+      "qty": 1,
+      "selection": "107 x 42 mm board; larger guard envelope assumed",
+      "source": "[DFRobot SEN0463](https://wiki.dfrobot.com/sen0463/)",
+      "pins": {
+        "-": "GND",
+        "+": "AUX_3V3",
+        "D": "PULSE_MODULE"
+      },
+      "position": [
+        10,
+        -20,
+        19
+      ],
+      "size": [
+        115,
+        48,
+        28
+      ]
+    },
+    {
+      "ref": "R1",
+      "name": "1k pulse series resistor",
+      "qty": 1,
+      "selection": "Not a high-voltage isolation component",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "PULSE_MODULE",
+        "2": "COUNT_IN"
+      }
+    },
+    {
+      "ref": "U4",
+      "name": "SHT40 Adafruit breakout",
+      "qty": 1,
+      "selection": "Address 0x44; vented end; envelope assumed",
+      "source": "[Adafruit SHT40](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/pinouts)",
+      "pins": {
+        "VIN": "AUX_3V3",
+        "GND": "GND",
+        "SDA": "SDA",
+        "SCL": "SCL"
+      },
+      "position": [
+        64,
+        32,
+        10
+      ],
+      "size": [
+        22,
+        18,
+        10
+      ]
+    },
+    {
+      "ref": "U5",
+      "name": "SSD1306 128x64 I2C OLED",
+      "qty": 1,
+      "selection": "Select 3.3 V compatible module at 0x3C; verify pin order",
+      "source": "[Adafruit SSD1306 library](https://github.com/adafruit/Adafruit_SSD1306)",
+      "pins": {
+        "VCC": "AUX_3V3",
+        "GND": "GND",
+        "SDA": "SDA",
+        "SCL": "SCL"
+      },
+      "position": [
+        22,
+        26,
+        12
+      ],
+      "size": [
+        30,
+        28,
+        12
+      ]
+    },
+    {
+      "ref": "S1",
+      "name": "Momentary reset-count button",
+      "qty": 1,
+      "selection": "Firmware: hold two seconds; internal pull-up",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "RESET_BTN",
+        "2": "GND"
+      },
+      "position": [
+        -71,
+        0,
+        12
+      ],
+      "size": [
+        10,
+        10,
+        12
+      ]
+    },
+    {
+      "ref": "R2",
+      "name": "1k status LED resistor",
+      "qty": 1,
+      "selection": "Prototype selection; bench verification required",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "1": "LED_ANODE",
+        "2": "LED_LIMITED"
+      }
+    },
+    {
+      "ref": "D1",
+      "name": "Green indicator LED",
+      "qty": 1,
+      "selection": "Heartbeat only, not detector-health indication",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {
+        "A": "LED_LIMITED",
+        "K": "GND"
+      }
+    },
+    {
+      "ref": "H1",
+      "name": "M3 fixture screw + nut + washer set",
+      "qty": 4,
+      "selection": "Plate fixture only; secure module guard separately",
+      "source": "[Design rationale](../docs/engineering.md)",
+      "pins": {}
+    }
+  ]
+}
