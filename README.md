@@ -28,6 +28,18 @@ dose, certify a safe environment or prove sensor health when counts are zero.
 The CAD is a guarded-module packaging draft. Battery, custom HV board and final
 pocket enclosure work are not complete.
 
+### Verification and troubleshooting
+
+- Run `python -m pytest tests`; production counting-library host tests are
+  documented in [tests/README.md](tests/README.md).
+- Log validation checks raw window counts, elapsed time, total-count continuity
+  and frequency agreement, not just the displayed CPM.
+- WAIT: no full post-start/reset window yet. FAULT or `counts_valid=0`: counter
+  overflow; stop the test, investigate, reset and record a new capture.
+- `sensor_ok=0`: environmental data unavailable; it says nothing about GM health.
+- Zero counts cannot distinguish quiet conditions from a broken detector path.
+- Record actual results in the [bench worksheet](docs/bench-record.md).
+
 <p align="center">
   <img src="docs/assets/iontrail-concepts.png" alt="IonTrail One enclosure study" width="920">
 </p>

@@ -36,7 +36,7 @@ void setup() {
   counterReady = ionTrail.begin(config);
   Serial.printf("# IonTrail EVT-A counter=%d sht40=%d oled=%d\n", counterReady, climateReady, displayReady);
   Serial.println("# CPM only; not calibrated dose. Zero counts cannot prove detector health.");
-  Serial.println("uptime_ms,window_ms,cpm,total_counts,temperature_c,humidity_percent,sensor_ok");
+  Serial.println("uptime_ms,window_ms,window_counts,cpm,total_counts,temperature_c,humidity_percent,sensor_ok,counts_valid");
 }
 
 void loop() {
@@ -58,10 +58,12 @@ void loop() {
       temperature = sensorOk ? t.temperature : NAN;
       humidity = sensorOk ? h.relative_humidity : NAN;
     }
-    Serial.printf("%lu,%lu,%.2f,%lu,%.2f,%.2f,%d\n",
+    Serial.printf("%lu,%lu,%lu,%.2f,%lu,%.2f,%.2f,%d,%d\n",
                   static_cast<unsigned long>(now),
-                  static_cast<unsigned long>(ionTrail.lastWindowMs()), ionTrail.cpm(),
-                  static_cast<unsigned long>(ionTrail.totalCounts()), temperature, humidity, sensorOk);
+                  static_cast<unsigned long>(ionTrail.lastWindowMs()),
+                  static_cast<unsigned long>(ionTrail.lastWindowCounts()), ionTrail.cpm(),
+                  static_cast<unsigned long>(ionTrail.totalCounts()), temperature, humidity,
+                  sensorOk, !ionTrail.overflowed());
   }
   if (now - lastUi >= 500) {
     lastUi = now;
@@ -70,7 +72,8 @@ void loop() {
       display.clearDisplay(); display.setTextColor(SSD1306_WHITE);
       display.setTextSize(1); display.setCursor(0, 0); display.println("IONTRAIL EVT-A");
       display.setTextSize(2);
-      if (ionTrail.lastWindowMs()) display.print(ionTrail.cpm(), 1);
+      if (ionTrail.overflowed()) display.print("FAULT");
+      else if (ionTrail.lastWindowMs()) display.print(ionTrail.cpm(), 1);
       else display.print("WAIT");
       display.setTextSize(1); display.println(" CPM");
       display.printf("Total %lu\n", static_cast<unsigned long>(ionTrail.totalCounts()));

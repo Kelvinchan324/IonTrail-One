@@ -23,6 +23,9 @@ conversion is released. Unused pins in the original concept remain unconnected.
 USB powers the selected ESP32-C3 SuperMini and AP2112K-3.3 auxiliary regulator.
 Confirm the exact SuperMini board schematic; the name alone does not identify a
 single vendor revision. The AP2112 pin list is for SOT25, not other packages.
+The manufacturer's [DS39724 revision 2-2](https://www.diodes.com/datasheet/download/AP2112.pdf)
+pin diagram confirms VIN=1, GND=2, EN=3, NC=4 and VOUT=5 for SOT25.
+The diagram does not establish the terminal order of an assembled breakout.
 Use a properly assembled breakout and local input/output ceramic capacitors.
 The auxiliary 3.3 V rail supplies the detector, screen and SHT40.
 It must NOT be tied to the MCU's regulator output.
@@ -75,6 +78,17 @@ Reconnect missing I2C modules with power off and restart to re-detect them.
 
 USB serial runs at 115200 and emits a CSV header, one row per complete window,
 and '#' diagnostic lines. Capture it to a log using a serial terminal.
+The current columns are `uptime_ms,window_ms,window_counts,cpm,total_counts,
+temperature_c,humidity_percent,sensor_ok,counts_valid` (one header line).
+Counts saturate instead of wrapping; overflow latches `counts_valid=0`, emits
+nonfinite CPM and displays FAULT. Stop the capture, investigate and reset before
+starting another test. This detects integer overflow, not detector saturation,
+unobserved pulses or a disconnected cable.
+
+The optional dead-time filter accepts the first pulse, then rejects intervals
+shorter than the configured value; it is disabled in the reference application.
+It does not correct a GM tube's physical dead time. Foreground SDK calls belong
+to one loop/task. `end()` releases the interrupt so another instance can start.
 A ten-second window has coarse resolution: one count contributes 6 CPM.
 For independent Poisson events, the approximate standard deviation scales as
 sqrt(N); tiny samples are noisy. This describes counting statistics, not detector
@@ -88,8 +102,11 @@ conditions or broken hardware.
    Its GPIO4 drives low pulses through 1k into GPIO3; join grounds. Never combine
    the fixture output and detector output. Ten hertz should yield about 600 CPM.
 2. **Reproducibility (30 min):** capture >=3 windows, then run
-   `python tools/check_log.py capture.csv --hz 10`. The initial partial window is
-   ignored. Repeat at 1, 10 and 100 Hz with a characterized generator and record
+   `python tools/check_log.py capture.csv --hz 10`. The first captured window is
+   excluded only from the frequency comparison; its arithmetic must still be valid.
+   Later rows must have contiguous uptime, matching count increments, valid flags
+   and CPM consistent with their raw counts. Missing rows, resets during a capture,
+   and malformed data fail. Repeat at 1, 10 and 100 Hz with a characterized generator and record
    raw counts, exact period, rejected/missing pulses and measured signal level.
 3. **Display/sensors (30 min):** disconnect one I2C module with power off.
    Restart; verify count logging survives. Compare temperature after warm-up
@@ -103,3 +120,6 @@ conditions or broken hardware.
 Completion gates: exact MCU/display revision, verified guard retention, injected
 pulse fidelity, power/thermal measurements and calibrated-reference assessment.
 Battery and pocket enclosure design follow those results.
+
+Use the [blank bench record](bench-record.md) for measurements and
+[software test guide](../tests/README.md) for reproducible host checks.
