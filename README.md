@@ -34,6 +34,12 @@ planning arithmetic with `python tools/check_power_budget.py`. Current allowance
 guard dimensions, retention and temperature remain unmeasured; passing the script
 is not hardware approval.
 
+The [STEP-derived enclosure review](mechanical/enclosure-visual-review.png) now
+labels component positions and shows the lid raised for inspection only. The
+detector guard size is still assumed, modules are not positively retained, and
+the reset button cannot be used through the closed draft lid. These are open
+design requirements; the illustration is not a fabrication or electrical release.
+
 ### Verification and troubleshooting
 
 - Run `python -m pytest tests`; production counting-library host tests are

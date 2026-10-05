@@ -70,3 +70,37 @@ Do not power, transport or shake this draft until proper retention is reviewed.
 
 Release remains blocked on these measurements and the
 [power/thermal review](../docs/power-review.md). No physical tests have run.
+
+## Visual handoff and source freshness
+
+![STEP-derived exploded cover and component placement](enclosure-visual-review.png)
+
+The left view uses the saved tray, lid and fixture STEP solids with the six
+component-envelope boxes. The lid is displaced **35 mm upward for illustration
+only**; the original assembly file remains closed. Translucency is an inspection
+aid, not a verified material property. The right view omits lid and tray walls to
+show component positions: dashed outline is the lid extent, not a wall profile.
+Fixture holes are not module mounting patterns. No power wiring is depicted.
+
+The render was visually checked, including correction of an overlapping axis
+caption. The plan makes the current division between the guarded detector and
+low-voltage electronics clear. It does not establish an electrical isolation
+distance or prevent a loose module crossing that division. S1's inaccessible
+closed-lid position, missing module retention and underside feet remain release
+blockers, not details to overlook during assembly.
+
+Reproduce with CadQuery 2.8.0 and Matplotlib 3.11.2:
+
+```sh
+python tools/render_enclosure_review.py
+python -m pytest tests/test_visual_review.py
+```
+
+The [ledger](enclosure-visual-review.json) records input/image hashes, versions
+and nine matched bodies. Before drawing, the renderer checks one-to-one body
+volumes (within 1e-4 mm3) and bounds (within 1e-4 mm) against enclosure-layout.step,
+plus the lid's bottom datum against parameters. This is not a topological
+identity, fit, intrusion, retention or electrical-safety proof. STEP geometry is
+not rewritten. Text hashes normalize CRLF to LF; STEP/PNG preserve native bytes.
+The regular Python CI suite flags stale source/image hashes without installing
+CAD libraries. Regenerate **and visually inspect** after changing source files.

@@ -1,0 +1,156 @@
+{
+  "physical_validation": false,
+  "assembly_body_match": true,
+  "match_basis": "one-to-one volume within 1e-4 mm3 and bounds within 1e-4 mm",
+  "rendered_bodies": 9,
+  "parts": [
+    {
+      "name": "Tray",
+      "bounds_signature": [
+        129142.34962660554,
+        -101.0,
+        101.0,
+        -53.5,
+        53.5,
+        -9.0,
+        42.0
+      ],
+      "triangles": 3728
+    },
+    {
+      "name": "Lid",
+      "bounds_signature": [
+        53764.20797231134,
+        -101.0,
+        101.0,
+        -53.5,
+        53.5,
+        42.0,
+        44.5
+      ],
+      "triangles": 1096
+    },
+    {
+      "name": "Fixture",
+      "bounds_signature": [
+        67854.73275569802,
+        -85.0,
+        85.0,
+        -50.0,
+        50.0,
+        0.0,
+        4.0
+      ],
+      "triangles": 1036
+    },
+    {
+      "name": "U1",
+      "bounds_signature": [
+        7410.0,
+        -65.0,
+        -39.0,
+        15.5,
+        34.5,
+        4.5,
+        19.5
+      ],
+      "triangles": 12
+    },
+    {
+      "name": "U2",
+      "bounds_signature": [
+        3840.0,
+        -30.0,
+        -10.0,
+        22.0,
+        38.0,
+        4.0,
+        16.0
+      ],
+      "triangles": 12
+    },
+    {
+      "name": "U3",
+      "bounds_signature": [
+        154560.0,
+        -47.5,
+        67.5,
+        -44.0,
+        4.0,
+        5.0,
+        33.0
+      ],
+      "triangles": 12
+    },
+    {
+      "name": "U4",
+      "bounds_signature": [
+        3960.0,
+        53.0,
+        75.0,
+        23.0,
+        41.0,
+        5.0,
+        15.0
+      ],
+      "triangles": 12
+    },
+    {
+      "name": "U5",
+      "bounds_signature": [
+        10080.0,
+        7.0,
+        37.0,
+        12.0,
+        40.0,
+        6.0,
+        18.0
+      ],
+      "triangles": 12
+    },
+    {
+      "name": "S1",
+      "bounds_signature": [
+        1199.9999999999998,
+        -76.0,
+        -66.0,
+        -5.0,
+        5.0,
+        6.0,
+        18.0
+      ],
+      "triangles": 12
+    }
+  ],
+  "lid_xy_mm": [
+    202.0,
+    107.0
+  ],
+  "closed_cover_height_mm": 53.5,
+  "display_only_lid_offset_mm": [
+    0,
+    0,
+    35
+  ],
+  "not_proven": [
+    "topological identity",
+    "fit",
+    "retention",
+    "electrical guarding"
+  ],
+  "generator_versions": {
+    "cadquery": "2.8.0",
+    "matplotlib": "3.11.2"
+  },
+  "hash_policy": "STEP/PNG native bytes; JSON/Python CRLF normalized to LF",
+  "render_sha256": "e93e8859be5abee767897e0d8d59dd299152dea739e6c20d43574c2869a9968c",
+  "sources_sha256": {
+    "hardware/rev-a.json": "127db6391b1f28ba9266327a66910790939481e783df60cb89a62df1068993e8",
+    "mechanical/enclosure-parameters.json": "9dcf98d99c2b0b2e37d37be599b827ae492a32a1edc0f7729be3c29a3f8b8a09",
+    "tools/render_enclosure_review.py": "5cece330e9f09579c7e4193fe240645487feeb77faf1a91c090cba1ee12aba40",
+    "mechanical/bench-tray-draft.step": "7c0618b2c7f4dd330fb41ce820d9c3d11f73c40b6221946f2f6d608f5422e67c",
+    "mechanical/bench-lid-draft.step": "dca50b6a2c208e3810e2ef2923db03c7f00af2ecd7588226e3a5d9843c559cda",
+    "mechanical/fixture-plate.step": "9805f8c8d2e3fa0c325bf7eb7264e5ff16f535ebfc5aafd7c9557c7a08ee8fdb",
+    "mechanical/enclosure-layout.step": "9dcfd4c5e37cf3ca9bd0966524e1b92e1573980fb313a84efa4204b05059f2db"
+  }
+}

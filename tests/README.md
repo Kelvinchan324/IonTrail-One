@@ -64,6 +64,12 @@ See [the power worksheet](../docs/power-review.md). To check draft solids locall
 install CadQuery 2.8.0 and run `python tools/build_enclosure.py`; CAD fit checks
 use assumed component envelopes and are not included in the lightweight CI job.
 
+The Python suite also checks `mechanical/enclosure-visual-review.json` input and
+image hashes. Regenerate using `python tools/render_enclosure_review.py` with
+CadQuery 2.8.0 and Matplotlib 3.11.2, then visually inspect before committing.
+The renderer matches nine input bodies to the saved assembly by volume/bounds;
+lightweight CI verifies freshness only, not CAD fit or electrical guarding.
+
 The tests cover elapsed-window rate calculation, first-pulse/dead-time behavior,
 reset of pending data, timer rollover, interrupt ownership, destruction and the
 overflow arithmetic helper. They do not simulate simultaneous threads or prove
