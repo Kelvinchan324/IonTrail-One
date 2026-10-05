@@ -49,12 +49,21 @@ is not hardware approval.
   requires a successful new read, not merely an I2C address acknowledgement.
 - INIT FAIL: counter initialization failed; no count rows are emitted. A blinking
   status LED indicates loop activity only, not sensor or counter health.
+- OLED missing or initialization failed at boot: serial counting can continue,
+  but automatic OLED reconnection is not implemented. Power off before checking
+  wiring; restart after correcting the fixture. Do not hot-plug the detector.
 - Zero counts cannot distinguish quiet conditions from a broken detector path.
 - Record actual results in the [bench worksheet](docs/bench-record.md).
 
 See the [environmental-data validity lesson](docs/climate-validity.md). The log
 checker now checks climate fields when present; its pass result still certifies
 neither sensor accuracy nor radiation dose.
+
+The [application-loop lesson](docs/application-testing.md) now exercises the
+production setup/loop and counter using host-only sensor/display doubles.
+It covers missing/failed climate reads, delayed I/O, reset timing and counter
+startup failure. This is simulated behavior coverage, not a physical bus test or
+OLED pixel/layout validation; the lesson includes a separate pending bench record.
 
 <p align="center">
   <img src="docs/assets/iontrail-concepts.png" alt="IonTrail One enclosure study" width="920">

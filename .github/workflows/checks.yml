@@ -17,6 +17,8 @@ jobs:
       - run: /tmp/iontrail-tests
       - run: g++ -std=c++17 -Iinclude tests/native/test_climate.cpp -o /tmp/climate-tests
       - run: /tmp/climate-tests
+      - run: g++ -std=c++17 -Wall -Wextra -Werror -Itests/native/app -Itests/native -Iinclude -Ilib/IonTrail/src tests/native/test_app.cpp lib/IonTrail/src/IonTrail.cpp -o /tmp/app-tests
+      - run: /tmp/app-tests
       - run: python tools/build_engineering.py
       - run: git diff --exit-code -- hardware/BOM.md hardware/schematic.svg mechanical/placements.json mechanical/placement.svg
       - run: pio run

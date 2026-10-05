@@ -34,6 +34,30 @@ Python CSV checks verify consistency of `sensor_ok` and climate fields when
 present; legacy counter-only captures remain supported. Neither set of tests
 measures environmental accuracy or establishes Geiger-module health.
 
+## Production application-loop integration
+
+```sh
+c++ -std=c++17 -Wall -Wextra -Werror -Itests/native/app -Itests/native -Iinclude -Ilib/IonTrail/src tests/native/test_app.cpp lib/IonTrail/src/IonTrail.cpp -o /tmp/app-tests
+/tmp/app-tests
+```
+
+This compiles the actual `src/main.cpp` setup/loop and production counter library.
+Test-only doubles replace the GPIO/time, serial, Wire, SHT4x and SSD1306 boundaries;
+they are not included in the embedded build. Cases cover startup pin/bus settings,
+one CSV row per count window, climate boot absence/begin failure/read failure and
+recovery, invalid humidity, delayed synchronous reads, reset hold/release and
+discarded pending counts, counter-init failure, and clock rollover. It checks
+display text after its scheduled 500-ms update, not immediately after each loop.
+
+One deliberate regression case records a **limitation**, not a success criterion
+for product readiness: an OLED absent at boot is not automatically retried.
+Update that case when implementing a reviewed reconnection policy. Native text
+capture does not render fonts, clipping, pixels, or actual I2C transfers. Driver
+initialization/read behavior is scripted, not the real Adafruit implementation.
+These tests are not a bus-hang watchdog, electrical fault injection, simultaneous
+interrupt model, hardware reset test, or proof of detector health. No physical
+measurement results are filled by the automated tests.
+
 The power-budget tests check planning arithmetic, overload scenarios, invalid
 numbers and input range. They do not provide measured current or temperature.
 See [the power worksheet](../docs/power-review.md). To check draft solids locally,
