@@ -20,6 +20,21 @@ On Windows an optional compiler is available through
 `python -m ziglang c++` and choose an output under ignored `build/`.
 Compile firmware separately with `pio run`.
 
+The counter test also rejects negative/oversized GPIO numbers (including values
+that would wrap to GPIO3), level/change/disabled/wakeup interrupt modes and other
+invalid integers. Rejection is checked before GPIO side effects and must preserve
+the active interrupt, pending counts, previous reading and measurement epoch.
+Both accepted edge modes and the C3 numeric pin boundaries are exercised. This
+does not approve board-reserved pins or test the actual ESP32 interrupt service.
+
+The actual starter sketch is compiled and exercised for a valid reading and an
+occupied-counter initialization failure:
+
+```sh
+c++ -std=c++17 -Wall -Wextra -Werror -Itests/native -Ilib/IonTrail/src tests/native/test_basic_example.cpp lib/IonTrail/src/IonTrail.cpp -o /tmp/example-tests
+/tmp/example-tests
+```
+
 The production climate-availability helper has an independent native test:
 
 ```sh

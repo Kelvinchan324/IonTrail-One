@@ -1,5 +1,7 @@
 #include <cmath>
 #include <cstdio>
+#include <climits>
+#include <initializer_list>
 #include "IonTrail.h"
 #include "count_math.h"
 
@@ -7,7 +9,74 @@ void expectRate(const IonTrailDevice& d, float expected) {
   assert(std::fabs(d.cpm() - expected) < 0.01F);
 }
 
+void testConfigurationBoundary() {
+  IonTrailDevice device;
+  IonTrailConfig config;
+  config.gmPulsePin = 3;
+  auto rejectedWithoutIo = [&](IonTrailConfig invalid) {
+    const auto interrupt = fakeInterrupt;
+    const int pin = attachedPin, mode = attachedMode;
+    const int pinModes = fakePinModeCalls, attaches = fakeAttachCalls;
+    const int detaches = fakeDetachCalls;
+    assert(!device.begin(invalid));
+    assert(fakeInterrupt == interrupt && attachedPin == pin && attachedMode == mode);
+    assert(fakePinModeCalls == pinModes && fakeAttachCalls == attaches &&
+           fakeDetachCalls == detaches);
+  };
+  auto rejectAll = [&]() {
+    for (int pin : {INT_MIN, -1, 22, 63, 64, 255, 256, 259, 65539, INT_MAX}) {
+      auto invalid = config;
+      invalid.gmPulsePin = pin;
+      rejectedWithoutIo(invalid);
+    }
+    for (int mode = -16; mode <= 32; ++mode) {
+      if (mode == RISING || mode == FALLING) continue;
+      auto invalid = config;
+      invalid.interruptMode = mode;
+      rejectedWithoutIo(invalid);
+    }
+    for (int mode : {INT_MIN, INT_MAX}) {
+      auto invalid = config;
+      invalid.interruptMode = mode;
+      rejectedWithoutIo(invalid);
+    }
+  };
+  rejectAll(); // Invalid startup cannot acquire the singleton or touch GPIO.
+  fakeMillis = 100;
+  assert(device.begin(config));
+  assert(attachedMode == FALLING);
+  pulseAt(1);
+  fakeMillis = 10100;
+  device.update();
+  assert(device.totalCounts() == 1);
+  pulseAt(2); // Pending data must survive an invalid reconfiguration too.
+  fakeMillis = 15000;
+  rejectAll();
+  assert(device.totalCounts() == 1 && device.lastWindowCounts() == 1);
+  assert(device.lastWindowMs() == 10000 && device.hasFreshReading());
+  expectRate(device, 6);
+  fakeMillis = 20100;
+  device.update();
+  assert(device.lastWindowMs() == 10000 && device.totalCounts() == 2);
+  assert(device.lastWindowCounts() == 1 && device.hasFreshReading());
+  device.end();
+  // Numeric-domain boundaries only; neither pin is a board-level recommendation.
+  for (int pin : {0, SOC_GPIO_PIN_COUNT - 1}) {
+    config.gmPulsePin = pin;
+    config.interruptMode = RISING;
+    assert(device.begin(config));
+    assert(attachedPin == pin && attachedMode == RISING);
+    pulseAt(3);
+    fakeMillis += 10000;
+    device.update();
+    assert(device.lastWindowCounts() == 1);
+    device.end();
+  }
+  fakeMillis = fakeMicros = 0;
+}
+
 int main() {
+  testConfigurationBoundary();
   IonTrailConfig config;
   config.gmPulsePin = 3;
   IonTrailDevice device, second;
@@ -68,5 +137,5 @@ int main() {
   assert(!addCounts(UINT32_MAX - 10, 11, result) && result == UINT32_MAX);
   assert(!addCounts(UINT32_MAX, 1, result) && result == UINT32_MAX);
   assert(addCounts(0, 0, result) && result == 0);
-  std::puts("PASS: actual counter library rate, windows, reset, dead time, timer rollover, lifetime, saturating arithmetic");
+  std::puts("PASS: actual counter configuration boundary, rate, windows, reset, dead time, timer rollover, lifetime, saturating arithmetic");
 }

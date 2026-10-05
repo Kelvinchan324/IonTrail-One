@@ -5,7 +5,12 @@
 IonTrailDevice* IonTrailDevice::activeInstance_ = nullptr;
 
 bool IonTrailDevice::begin(const IonTrailConfig& config) {
-  if (config.gmPulsePin < 0 || config.sampleWindowMs == 0 ||
+  // Validate before Arduino's uint8_t conversion, or e.g. 259 aliases GPIO3.
+  // Range-check before digitalPinIsValid's bit shift as well.
+  if (config.gmPulsePin < 0 || config.gmPulsePin >= SOC_GPIO_PIN_COUNT ||
+      !digitalPinIsValid(config.gmPulsePin) ||
+      (config.interruptMode != FALLING && config.interruptMode != RISING) ||
+      config.sampleWindowMs == 0 ||
       config.sampleWindowMs >= 0x80000000UL || config.deadTimeMicros >= 0x80000000UL)
     return false;
   if (activeInstance_ && activeInstance_ != this) return false;

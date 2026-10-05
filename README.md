@@ -55,6 +55,10 @@ design requirements; the illustration is not a fabrication or electrical release
   requires a successful new read, not merely an I2C address acknowledgement.
 - INIT FAIL: counter initialization failed; no count rows are emitted. A blinking
   status LED indicates loop activity only, not sensor or counter health.
+- The SDK rejects out-of-range GPIO numbers and interrupt modes other than
+  FALLING/RISING before touching the current acquisition. A successful `begin`
+  still does not verify interrupt attachment or detector health. See the
+  [counter-configuration lesson](docs/counter-configuration.md).
 - OLED missing or initialization failed at boot: serial counting can continue,
   with a display connection probe/retry every two seconds. Detected loss suspends
   drawing; recovery reinitializes the display without restarting the shared bus.
@@ -146,22 +150,26 @@ The SDK is organized as a small Arduino/PlatformIO library. Applications can sub
 #include <IonTrail.h>
 
 IonTrailDevice ionTrail;
+bool counterReady = false;
 
 void setup() {
+  Serial.begin(115200);
   IonTrailConfig config;
   config.gmPulsePin = 3;
   config.sampleWindowMs = 10000;
   config.deadTimeMicros = 0; // Enable only with characterized tube data.
-  ionTrail.begin(config);
+  counterReady = ionTrail.begin(config);
+  if (!counterReady) Serial.println("# counter INIT FAIL; no measurements");
 }
 
 void loop() {
+  if (!counterReady) return;
   ionTrail.update();
 
   if (ionTrail.hasFreshReading()) {
     Serial.printf("CPM: %.1f  Total: %lu\n",
                   ionTrail.cpm(),
-                  ionTrail.totalCounts());
+                  static_cast<unsigned long>(ionTrail.totalCounts()));
   }
 }
 ```

@@ -3,10 +3,12 @@
 #include <Arduino.h>
 
 struct IonTrailConfig {
+  // ESP32 GPIO number, not a board header position; check board reservations.
   int gmPulsePin = -1;
   uint32_t sampleWindowMs = 10000;
   // Leave disabled unless the selected tube and pulse circuit have been characterized.
   uint32_t deadTimeMicros = 0;
+  // One edge per pulse only: FALLING (reference build) or RISING.
   int interruptMode = FALLING;
 };
 
@@ -16,6 +18,9 @@ class IonTrailDevice {
   ~IonTrailDevice() { end(); }
   IonTrailDevice(const IonTrailDevice&) = delete;
   IonTrailDevice& operator=(const IonTrailDevice&) = delete;
+  // False on invalid configuration or another library owner's interrupt.
+  // True does not verify Arduino's void interrupt attachment or detector health.
+  // Invalid reconfiguration leaves an existing acquisition unchanged.
   bool begin(const IonTrailConfig& config);
   void end();
   void update();
