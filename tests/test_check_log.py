@@ -101,3 +101,62 @@ def test_correct_math_wrong_frequency_rejected():
 def test_bad_capture_rejected(text):
     with pytest.raises(ValueError):
         log.check(text, 10, 12)
+
+
+def climate_capture(temperature="23.5", humidity="45.0", ok="1"):
+    rows = list(csv.DictReader(io.StringIO(capture())))
+    for row in rows:
+        row.update(temperature_c=temperature, humidity_percent=humidity, sensor_ok=ok)
+    stream = io.StringIO()
+    writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+    writer.writeheader()
+    writer.writerows(rows)
+    return stream.getvalue()
+
+
+@pytest.mark.parametrize(
+    "temperature,humidity,ok",
+    [
+        ("23.5", "45", "1"),
+        ("0", "0", "1"),
+        ("20", "100", "1"),
+        ("nan", "nan", "0"),
+    ],
+)
+def test_climate_consistency_accepts_available_or_unavailable(
+    temperature, humidity, ok
+):
+    assert log.check(climate_capture(temperature, humidity, ok), 10, 12) == 2
+
+
+@pytest.mark.parametrize(
+    "temperature,humidity,ok",
+    [
+        ("nan", "45", "1"),
+        ("inf", "45", "1"),
+        ("20", "nan", "1"),
+        ("20", "-1", "1"),
+        ("20", "101", "1"),
+        ("", "45", "1"),
+        ("20", "45", "0"),
+        ("nan", "45", "0"),
+        ("inf", "nan", "0"),
+        ("20", "45", "true"),
+        ("20", "45", "2"),
+    ],
+)
+def test_invalid_climate_claims_rejected(temperature, humidity, ok):
+    with pytest.raises(ValueError, match="CSV data row"):
+        log.check(climate_capture(temperature, humidity, ok), 10, 12)
+
+
+def test_partial_climate_schema_rejected():
+    text = capture().replace("counts_valid", "counts_valid,temperature_c")
+    with pytest.raises(ValueError, match="incomplete climate"):
+        log.check(text, 10, 12)
+
+
+def test_duplicate_columns_rejected():
+    text = capture().replace("counts_valid", "counts_valid,cpm")
+    with pytest.raises(ValueError, match="duplicate CSV"):
+        log.check(text, 10, 12)

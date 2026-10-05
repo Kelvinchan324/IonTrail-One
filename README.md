@@ -43,8 +43,18 @@ is not hardware approval.
 - WAIT: no full post-start/reset window yet. FAULT or `counts_valid=0`: counter
   overflow; stop the test, investigate, reset and record a new capture.
 - `sensor_ok=0`: environmental data unavailable; it says nothing about GM health.
+- Missing climate sensor at boot: initialization is retried once per completed
+  count window. Failed or invalid reads publish `nan,nan,0`; the display stops
+  showing a climate sample after 15 seconds without a valid update. Recovery
+  requires a successful new read, not merely an I2C address acknowledgement.
+- INIT FAIL: counter initialization failed; no count rows are emitted. A blinking
+  status LED indicates loop activity only, not sensor or counter health.
 - Zero counts cannot distinguish quiet conditions from a broken detector path.
 - Record actual results in the [bench worksheet](docs/bench-record.md).
+
+See the [environmental-data validity lesson](docs/climate-validity.md). The log
+checker now checks climate fields when present; its pass result still certifies
+neither sensor accuracy nor radiation dose.
 
 <p align="center">
   <img src="docs/assets/iontrail-concepts.png" alt="IonTrail One enclosure study" width="920">

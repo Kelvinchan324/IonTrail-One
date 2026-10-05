@@ -27,6 +27,13 @@ def check(text, hz, tolerance):
     )
     if not required.issubset(reader.fieldnames or []):
         raise ValueError("missing counter columns; use the current firmware CSV header")
+    fields = reader.fieldnames or []
+    if len(fields) != len(set(fields)):
+        raise ValueError("duplicate CSV column names")
+    climate_fields = {"temperature_c", "humidity_percent", "sensor_ok"}
+    has_climate = bool(climate_fields.intersection(fields))
+    if has_climate and not climate_fields.issubset(fields):
+        raise ValueError("incomplete climate columns")
     rows = list(reader)
     if len(rows) < 3:
         raise ValueError("capture at least three complete windows")
@@ -35,6 +42,8 @@ def check(text, hz, tolerance):
         try:
             if None in row or any(row.get(key) in (None, "") for key in required):
                 raise ValueError("malformed CSV row")
+            if has_climate:
+                validate_climate(row)
             integers = {key: int(row[key]) for key in required - {"cpm"}}
             if any(not 0 <= value <= 0xFFFFFFFF for value in integers.values()):
                 raise ValueError("counter field outside uint32 range")
@@ -66,6 +75,21 @@ def check(text, hz, tolerance):
         except (ValueError, TypeError) as exc:
             raise ValueError(f"CSV data row {index}: {exc}") from exc
     return len(rows) - 1
+
+
+def validate_climate(row):
+    """Consistency only: never certify temperature/RH accuracy or detector health."""
+    if row.get("sensor_ok") not in ("0", "1"):
+        raise ValueError("sensor_ok must be 0 or 1")
+    temperature = float(row["temperature_c"])
+    humidity = float(row["humidity_percent"])
+    if row["sensor_ok"] == "1":
+        if not math.isfinite(temperature) or not math.isfinite(humidity):
+            raise ValueError("valid climate reading must contain finite numbers")
+        if not 0 <= humidity <= 100:
+            raise ValueError("humidity outside 0..100 percent")
+    elif not math.isnan(temperature) or not math.isnan(humidity):
+        raise ValueError("unavailable climate fields must both be NaN")
 
 
 if __name__ == "__main__":

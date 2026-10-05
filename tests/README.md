@@ -20,6 +20,20 @@ On Windows an optional compiler is available through
 `python -m ziglang c++` and choose an output under ignored `build/`.
 Compile firmware separately with `pio run`.
 
+The production climate-availability helper has an independent native test:
+
+```sh
+c++ -std=c++17 -Iinclude tests/native/test_climate.cpp -o /tmp/climate-tests
+/tmp/climate-tests
+```
+
+It checks finite values, RH range, failed-read invalidation, the 15-second age
+boundary, deliberate successful recovery and clock rollover. It does not execute
+real I2C, the full main loop, OLED drawing, or vendor-driver initialization/retry.
+Python CSV checks verify consistency of `sensor_ok` and climate fields when
+present; legacy counter-only captures remain supported. Neither set of tests
+measures environmental accuracy or establishes Geiger-module health.
+
 The power-budget tests check planning arithmetic, overload scenarios, invalid
 numbers and input range. They do not provide measured current or temperature.
 See [the power worksheet](../docs/power-review.md). To check draft solids locally,

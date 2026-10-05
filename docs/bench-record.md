@@ -61,7 +61,11 @@ count quantization. Keep raw logs and checker output with this record.
 | Start/reset | WAIT until a full new interval; totals cleared | Not tested |
 | Button held longer than 2 s | One reset per hold, next reset only after release | Not tested |
 | No pulses | Zero-count windows; no healthy/safe claim | Not tested |
-| Missing SHT40 at boot | sensor_ok=0; counting continues | Not tested |
+| Missing SHT40 at boot | sensor_ok=0 and nan climate fields; counting continues; init retried per completed window | Not tested |
+| Transient climate communication failure | Invalid climate fields immediately on failed read; new successful read restores them | Not tested |
+| Climate sample ages beyond 15 s without a new valid reading | Display shows Climate unavailable, not cached numbers | Not tested |
+| Inconsistent climate CSV validity flag | Offline validator rejects capture | Not tested |
+| Counter initialization failure | INIT FAIL when OLED available; no count data rows; LED is not a health indicator | Not tested |
 | Missing OLED at boot | CSV continues | Not tested |
 | Interrupted CSV / duplicated row | Offline validator rejects capture | Not tested |
 | Detector reconnected with power off | Intact guard, correct low-voltage connector | Not tested |
