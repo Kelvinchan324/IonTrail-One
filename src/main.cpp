@@ -12,6 +12,8 @@ Adafruit_SSD1306 display(128, 64, &Wire, -1);
 bool counterReady = false, climateReady = false, displayReady = false;
 bool resetHeld = false, resetDone = false;
 uint32_t resetSince = 0, lastUi = 0;
+uint32_t lastDisplayProbe = 0;
+constexpr uint32_t kDisplayProbePeriodMs = 2000;
 ClimateReading environment;
 
 bool i2cPresent(uint8_t address) {
@@ -26,6 +28,22 @@ bool startClimate() {
   return true;
 }
 
+void serviceDisplay(uint32_t now, bool force = false) {
+  if (!force && uint32_t(now - lastDisplayProbe) < kDisplayProbePeriodMs) return;
+  lastDisplayProbe = now; // One attempt per period; never catch up in a burst.
+  const bool wasReady = displayReady;
+  if (!i2cPresent(IonTrailBoard::kDisplayAddress)) displayReady = false;
+  else if (!displayReady) {
+    // The pinned driver reuses its framebuffer. Do not restart shared Wire or
+    // repeatedly initialize an already-available display. ACK is not pixel feedback.
+    displayReady = display.begin(SSD1306_SWITCHCAPVCC, IonTrailBoard::kDisplayAddress,
+                                 false, false) && i2cPresent(IonTrailBoard::kDisplayAddress);
+  }
+  if (!force && wasReady != displayReady)
+    Serial.println(displayReady ? "# oled available; address ACK, pixels unverified" :
+                                  "# oled unavailable; serial counting continues if counter ready");
+}
+
 void setup() {
   Serial.begin(115200);
   pinMode(IonTrailBoard::kButtonPrimaryPin, INPUT_PULLUP);
@@ -33,8 +51,7 @@ void setup() {
   Wire.begin(IonTrailBoard::kI2cSdaPin, IonTrailBoard::kI2cSclPin);
   Wire.setClock(100000); Wire.setTimeOut(50);
   climateReady = startClimate();
-  displayReady = i2cPresent(IonTrailBoard::kDisplayAddress) &&
-      display.begin(SSD1306_SWITCHCAPVCC, IonTrailBoard::kDisplayAddress, false, false);
+  serviceDisplay(millis(), true);
   IonTrailConfig config;
   config.gmPulsePin = IonTrailBoard::kGmPulsePin;
   config.sampleWindowMs = 10000; config.deadTimeMicros = 0;
@@ -75,6 +92,8 @@ void loop() {
                   sensorOk, !ionTrail.overflowed());
   }
   now = millis(); // Climate I/O takes time; never compare a sample to an older clock.
+  serviceDisplay(now);
+  now = millis(); // Display initialization/probes also use synchronous I2C.
   if (now - lastUi >= 500) {
     lastUi = now;
     digitalWrite(IonTrailBoard::kStatusLedPin, !digitalRead(IonTrailBoard::kStatusLedPin));

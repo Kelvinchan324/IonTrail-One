@@ -49,9 +49,10 @@ recovery, invalid humidity, delayed synchronous reads, reset hold/release and
 discarded pending counts, counter-init failure, and clock rollover. It checks
 display text after its scheduled 500-ms update, not immediately after each loop.
 
-One deliberate regression case records a **limitation**, not a success criterion
-for product readiness: an OLED absent at boot is not automatically retried.
-Update that case when implementing a reviewed reconnection policy. Native text
+OLED cases now cover boot absence, bounded two-second retries, allocation/init
+failure, detected loss, post-initialization ACK loss, recovery without repeated
+live-driver initialization, no burst catch-up, synchronous retry delay, unchanged
+count-window timestamps and uint32 rollover. Native text
 capture does not render fonts, clipping, pixels, or actual I2C transfers. Driver
 initialization/read behavior is scripted, not the real Adafruit implementation.
 These tests are not a bus-hang watchdog, electrical fault injection, simultaneous

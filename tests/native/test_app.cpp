@@ -18,7 +18,7 @@ void freshBoot(bool sensorPresent = true, bool oledPresent = true, uint32_t at =
   display = Adafruit_SSD1306(128, 64, &Wire, -1);
   counterReady = climateReady = displayReady = false;
   resetHeld = resetDone = false;
-  resetSince = lastUi = 0;
+  resetSince = lastUi = lastDisplayProbe = 0;
   environment = ClimateReading{};
 }
 void loopAt(uint32_t at) { fakeMillis = at; loop(); }
@@ -80,15 +80,64 @@ int main() {
   loopAt(30000); assert(climateReady && climate.begins == 2 && climate.reads == 1);
   requireText(lastRow(), ",25.00,50.00,1,1");
   assert(display.frames == 0);
-  // Explicitly capture current limitation: no OLED retry after boot absence.
+  // Boot-missing OLED can recover only at the next two-second service interval.
   Wire.present[IonTrailBoard::kDisplayAddress] = true;
   loopAt(30500); assert(!displayReady && display.begins == 0);
+  loopAt(31999); assert(!displayReady && display.begins == 0);
+  loopAt(32000); assert(displayReady && display.begins == 1 && display.frames == 0);
+  loopAt(32499); assert(display.frames == 1); // Next scheduled 500 ms UI refresh.
+  requireText(display.lastFrame, "25.0 C / 50.0 %RH");
+  requireText(Serial.text, "# oled available; address ACK, pixels unverified");
+  loopAt(34000); assert(display.begins == 1); // Probe only; no repeated initialization.
 
   freshBoot(); display.beginOk = false; setup();
   assert(!displayReady && display.begins == 1);
   loopAt(10000);
   requireText(lastRow(), ",25.00,50.00,1,1");
   assert(display.frames == 0); // Allocation/init failure also leaves serial available.
+  assert(display.begins == 2);
+  loopAt(11999); assert(display.begins == 2);
+  display.beginOk = true;
+  loopAt(12000); assert(displayReady && display.begins == 3);
+  const auto rendered = display.frames;
+  Wire.present[IonTrailBoard::kDisplayAddress] = false;
+  loopAt(14000); assert(!displayReady && display.frames == rendered);
+  const auto reportCount = occurrences(Serial.text, "# oled unavailable");
+  assert(reportCount == 1);
+  loopAt(16000); assert(occurrences(Serial.text, "# oled unavailable") == reportCount);
+  Wire.present[IonTrailBoard::kDisplayAddress] = true;
+  display.dropAckAfterBegin = true;
+  loopAt(18000); assert(!displayReady && display.begins == 4);
+  assert(display.frames == rendered); // ACK loss during initialization is not recovery.
+  display.dropAckAfterBegin = false;
+  Wire.present[IonTrailBoard::kDisplayAddress] = true;
+  loopAt(20000); assert(displayReady && display.begins == 5);
+  requireText(display.lastFrame, "25.0 C / 50.0 %RH");
+  // Diagnostic comments do not change row count or CSV schema.
+  assert(occurrences(Serial.text, ",25.00,50.00,1,1\n") == 2);
+
+  // Recovery delay refreshes UI time but never rewrites the count-window endpoint.
+  freshBoot(true, false); setup();
+  Wire.present[IonTrailBoard::kDisplayAddress] = true; display.beginDelayMs = 600;
+  pulseAt(1000); loopAt(10000);
+  requireText(Serial.text, "10000,10000,1,6.00,1,25.00,50.00,1,1\n");
+  assert(fakeMillis == 10601 && lastUi == 10600 && displayReady);
+  assert(ionTrail.lastWindowMs() == 10000);
+
+  // Absent display gets one probe per period, even after many missed periods.
+  freshBoot(true, false); setup();
+  for (uint32_t at : {500U, 1000U, 1500U, 1999U}) loopAt(at);
+  assert(Wire.probes[IonTrailBoard::kDisplayAddress] == 1 && display.begins == 0);
+  loopAt(2000); assert(Wire.probes[IonTrailBoard::kDisplayAddress] == 2);
+  loopAt(2000); assert(Wire.probes[IonTrailBoard::kDisplayAddress] == 2);
+  loopAt(20000); assert(Wire.probes[IonTrailBoard::kDisplayAddress] == 3);
+  assert(counterReady && display.frames == 0);
+
+  // Missing-display retry timing also survives uint32 rollover.
+  freshBoot(true, false, UINT32_MAX - 999); setup();
+  Wire.present[IonTrailBoard::kDisplayAddress] = true;
+  loopAt(999); assert(!displayReady);
+  loopAt(1000); assert(displayReady && display.begins == 1);
 
   // Delayed synchronous I/O: row timestamp is count endpoint, not climate time.
   freshBoot(); setup(); climate.readDelayMs = 600;
@@ -132,5 +181,5 @@ int main() {
   pulseAt(1); loopAt(11000);
   assert(lastRow() == "11000,10000,1,6.00,1,25.00,50.00,1,1");
   ionTrail.end();
-  std::puts("PASS: production setup/loop, climate retry/failure/delay, CSV, OLED text, reset, init failure and rollover");
+  std::puts("PASS: production setup/loop, climate/CSV/reset, OLED retry/loss/ACK/delay, init failure and rollover");
 }

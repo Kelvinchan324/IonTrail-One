@@ -78,6 +78,11 @@ is pulses * 60000 / measured interval in milliseconds. No universal dose factor,
 background subtraction, alarm threshold or safe/unsafe label is applied.
 SHT40 failure displays unavailable, while counting and serial output continue.
 A missing display is tolerated; the serial output remains the primary diagnostic.
+The OLED address is rechecked every two seconds; a detected loss suspends display
+updates, and a returned address permits bounded reinitialization. Read the
+[display-recovery lesson](display-recovery.md): an address ACK does not verify
+pixels or counter/detector health, and shared-bus electrical faults can still
+affect synchronous I/O. No live rewiring or detector hot-plug is authorized.
 Reconnect missing I2C modules with power off and restart to re-detect them.
 
 USB serial runs at 115200 and emits a CSV header, one row per complete window,

@@ -56,8 +56,11 @@ design requirements; the illustration is not a fabrication or electrical release
 - INIT FAIL: counter initialization failed; no count rows are emitted. A blinking
   status LED indicates loop activity only, not sensor or counter health.
 - OLED missing or initialization failed at boot: serial counting can continue,
-  but automatic OLED reconnection is not implemented. Power off before checking
-  wiring; restart after correcting the fixture. Do not hot-plug the detector.
+  with a display connection probe/retry every two seconds. Detected loss suspends
+  drawing; recovery reinitializes the display without restarting the shared bus.
+  `# oled` log comments report transitions, not proof of working pixels. See the
+  [display-recovery lesson](docs/display-recovery.md). Power off before checking
+  wiring; do not hot-plug the detector or use this as permission to live-rewire.
 - Zero counts cannot distinguish quiet conditions from a broken detector path.
 - Record actual results in the [bench worksheet](docs/bench-record.md).
 

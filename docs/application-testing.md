@@ -18,12 +18,16 @@ to compile and run it. Do not flash the host test doubles to a board.
 | Button low for less than 2000 ms | No totals reset |
 | Button low for at least 2000 ms | One reset per uninterrupted hold; pending pulses discarded; new full window required |
 | Counter cannot own the interrupt at setup | INIT FAIL display text; no numeric CSV rows |
-| OLED absent at boot | Serial/counting still operate; OLED does not currently reconnect automatically |
+| OLED absent at boot | Serial/counting still operate; probe/init retry every two seconds |
+| OLED stops acknowledging | Suspend drawing at the next scheduled probe; emit one transition comment |
+| OLED returns or init failure clears | Reinitialize without restarting shared Wire; require post-init ACK |
 
 After a reset, the visible WAIT message appears on the next scheduled display
 refresh, nominally within 500 ms **if the loop and I2C calls keep running**.
 This is not a measured display response time. If the loop stalls, the screen can
 retain old text. The LED similarly indicates only foreground-loop activity.
+The [display-recovery lesson](display-recovery.md) covers retry timing, delayed
+initialization and the distinction between an address ACK and visible pixels.
 
 ## Teaching exercise
 

@@ -53,6 +53,17 @@ def test_injected_frequency():
     assert log.check(capture(), 10, 12) == 2
 
 
+def test_display_transition_comments_preserve_count_capture():
+    lines = capture().splitlines()
+    annotated = "\n".join([
+        "# oled unavailable; serial counting continues if counter ready",
+        lines[0], lines[1],
+        "# oled available; address ACK, pixels unverified",
+        lines[2], lines[3],
+    ])
+    assert log.check(annotated, 10, 12) == 2
+
+
 def test_uptime_rollover():
     text = capture(
         [
