@@ -5,6 +5,7 @@ Run the CSV validation tests from the repository root:
 ```sh
 python -m pip install pytest==9.1.1
 python -m pytest tests
+python tools/check_power_budget.py
 ```
 
 Run the **production counter implementation** against a minimal host GPIO/time shim:
@@ -18,6 +19,12 @@ On Windows an optional compiler is available through
 `python -m pip install ziglang==0.13.0`; replace `c++` with
 `python -m ziglang c++` and choose an output under ignored `build/`.
 Compile firmware separately with `pio run`.
+
+The power-budget tests check planning arithmetic, overload scenarios, invalid
+numbers and input range. They do not provide measured current or temperature.
+See [the power worksheet](../docs/power-review.md). To check draft solids locally,
+install CadQuery 2.8.0 and run `python tools/build_enclosure.py`; CAD fit checks
+use assumed component envelopes and are not included in the lightweight CI job.
 
 The tests cover elapsed-window rate calculation, first-pulse/dead-time behavior,
 reset of pending data, timer rollover, interrupt ownership, destruction and the

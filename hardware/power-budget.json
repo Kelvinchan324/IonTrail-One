@@ -1,0 +1,23 @@
+{
+  "status": "Planning allowances only; no measured currents or thermal validation",
+  "sources": {
+    "regulator": "https://www.diodes.com/datasheet/download/AP2112.pdf",
+    "detector": "https://wiki.dfrobot.com/sen0463/"
+  },
+  "input_v": 5.0,
+  "aux_v": 3.3,
+  "input_budget_ma": 500.0,
+  "host_allowance_ma": 350.0,
+  "aux_design_limit_ma": 150.0,
+  "aux_margin_factor": 1.25,
+  "ldo_quiescent_max_ma": 0.08,
+  "theta_ja_reference_c_per_w": 184.0,
+  "ambient_scenario_c": 40.0,
+  "junction_review_limit_c": 100.0,
+  "loads": [
+    {"ref": "U3", "allowance_ma": 30.0, "basis": "Unmeasured detector allowance, not vendor maximum"},
+    {"ref": "U4", "allowance_ma": 5.0, "basis": "Unmeasured breakout allowance; heater disabled"},
+    {"ref": "U5", "allowance_ma": 40.0, "basis": "Unmeasured OLED allowance; verify full-white display"},
+    {"ref": "reserve", "allowance_ma": 10.0, "basis": "Auxiliary wiring/breakout reserve"}
+  ]
+}

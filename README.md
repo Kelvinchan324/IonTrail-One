@@ -28,6 +28,12 @@ dose, certify a safe environment or prove sensor health when counts are zero.
 The CAD is a guarded-module packaging draft. Battery, custom HV board and final
 pocket enclosure work are not complete.
 
+New review drafts: [secondary bench cover STEP/STL and fit lesson](mechanical/README.md)
+and [low-voltage power-budget worksheet](docs/power-review.md). Reproduce the
+planning arithmetic with `python tools/check_power_budget.py`. Current allowances,
+guard dimensions, retention and temperature remain unmeasured; passing the script
+is not hardware approval.
+
 ### Verification and troubleshooting
 
 - Run `python -m pytest tests`; production counting-library host tests are

@@ -18,7 +18,10 @@ Prices and procurement approval are not supplied. Quantities are per prototype.
 | S1 | 1 | Momentary reset-count button | Firmware: hold two seconds; internal pull-up | [Design rationale](../docs/engineering.md) |
 | R2 | 1 | 1k status LED resistor | Prototype selection; bench verification required | [Design rationale](../docs/engineering.md) |
 | D1 | 1 | Green indicator LED | Heartbeat only, not detector-health indication | [Design rationale](../docs/engineering.md) |
-| H1 | 4 | M3 fixture screw + nut + washer set | Plate fixture only; secure module guard separately | [Design rationale](../docs/engineering.md) |
+| H1 | 4 | M3 fixture screw + nut + washer set | Four plate/tray through-bolts; length TBD from 13 mm stack plus nut/washers; no guard retention | [Design rationale](../docs/engineering.md) |
+| H2 | 1 | Secondary bench tray draft | Editable STEP/STL; material and protective performance unverified | [Enclosure review](../mechanical/README.md) |
+| H3 | 1 | Secondary bench lid draft | Transparent material candidate; 2.5 mm thickness, no protective rating | [Enclosure review](../mechanical/README.md) |
+| H4 | 4 | M3 lid through-bolt + nut + washer set | 3.4 mm holes; candidate M3x16 length requires stack and tool-access verification | [Enclosure review](../mechanical/README.md) |
 
 ## Net connections
 

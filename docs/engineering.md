@@ -11,6 +11,8 @@ and logging before a custom battery or high-voltage board is designed.
 - [Editable revision](../hardware/rev-a.json).
 - [Placement drawing](../mechanical/placement.svg), [STEP assembly](../mechanical/layout-draft.step).
 - [Fixture plate STEP](../mechanical/fixture-plate.step) / [STL](../mechanical/fixture-plate.stl).
+- [Secondary bench cover and retention measurement lesson](../mechanical/README.md).
+- [Reproducible power allocation and thermal review](power-review.md).
 - Regenerate with `python tools/build_engineering.py --cad` (CadQuery 2.8.0).
   Without `--cad`, only Python standard library is needed.
 
@@ -55,6 +57,8 @@ a current-limited USB source. Budget auxiliary current initially at <=150 mA
 pending measurements; AP2112 dissipation is (5-3.3)*I, e.g. 0.255 W at 150 mA.
 The module regulator rating alone does not prove acceptable breakout temperature.
 USB connector, trace capacity and total board current still need verification.
+The power-budget script now checks explicit unmeasured allowances and scenarios;
+see its worksheet before interpreting the 150 mA ceiling as an achieved result.
 
 ## Packaging
 

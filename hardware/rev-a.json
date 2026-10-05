@@ -237,9 +237,24 @@
       "ref": "H1",
       "name": "M3 fixture screw + nut + washer set",
       "qty": 4,
-      "selection": "Plate fixture only; secure module guard separately",
+      "selection": "Four plate/tray through-bolts; length TBD from 13 mm stack plus nut/washers; no guard retention",
       "source": "[Design rationale](../docs/engineering.md)",
       "pins": {}
+    },
+    {
+      "ref": "H2", "name": "Secondary bench tray draft", "qty": 1,
+      "selection": "Editable STEP/STL; material and protective performance unverified",
+      "source": "[Enclosure review](../mechanical/README.md)", "pins": {}
+    },
+    {
+      "ref": "H3", "name": "Secondary bench lid draft", "qty": 1,
+      "selection": "Transparent material candidate; 2.5 mm thickness, no protective rating",
+      "source": "[Enclosure review](../mechanical/README.md)", "pins": {}
+    },
+    {
+      "ref": "H4", "name": "M3 lid through-bolt + nut + washer set", "qty": 4,
+      "selection": "3.4 mm holes; candidate M3x16 length requires stack and tool-access verification",
+      "source": "[Enclosure review](../mechanical/README.md)", "pins": {}
     }
   ]
 }

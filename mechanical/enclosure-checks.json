@@ -1,0 +1,25 @@
+{
+  "physical_validation": false,
+  "status": "Bench cover around assumed envelopes; not a certified electrical guard",
+  "outer_lid_xy_mm": [
+    202.0,
+    107.0
+  ],
+  "bottom_z_mm": -9.0,
+  "lid_top_z_mm": 44.5,
+  "fixture_plate_z_mm": [
+    0,
+    4
+  ],
+  "tray_volume_mm3": 129142.35,
+  "lid_volume_mm3": 53764.208,
+  "unresolved": [
+    "actual intact factory guard dimensions and retention mounting points",
+    "module-to-fixture retention and strain relief",
+    "insulating feet and underside through-bolt clearance",
+    "MCU USB connector direction and plug bend radius",
+    "transparent lid material, optical readability and temperature",
+    "button actuator extension; button is inaccessible with this draft lid closed",
+    "material flammability, electrical insulation, touch access and drop testing"
+  ]
+}

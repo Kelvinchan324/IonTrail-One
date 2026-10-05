@@ -12,6 +12,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install platformio==6.2.0 pytest==9.1.1
       - run: python -m pytest tests
+      - run: python tools/check_power_budget.py
       - run: g++ -std=c++17 -Itests/native -Ilib/IonTrail/src tests/native/test_counter.cpp lib/IonTrail/src/IonTrail.cpp -o /tmp/iontrail-tests
       - run: /tmp/iontrail-tests
       - run: python tools/build_engineering.py

@@ -1,0 +1,29 @@
+{
+  "status": "Bench cover around assumed envelopes; not a certified electrical guard",
+  "plate_edge_clearance": 1.0,
+  "wall": 2.5,
+  "floor": 3.0,
+  "under_plate_gap": 6.0,
+  "lid_bottom_z": 42.0,
+  "lid_thickness": 2.5,
+  "fixture_boss_diameter": 10.0,
+  "lid_fastener_x": 95.0,
+  "lid_fastener_y": 43.0,
+  "lid_fastener_diameter": 3.4,
+  "lid_ear_radius": 6.0,
+  "lid_ear_depth": 8.0,
+  "usb_opening_yz": [25.0, 12.0],
+  "usb_opening_size_yz": [16.0, 10.0],
+  "sensor_vent_x": [58.0, 64.0, 70.0],
+  "sensor_vent_y": 32.0,
+  "sensor_vent_size_xy": [2.0, 12.0],
+  "unresolved": [
+    "actual intact factory guard dimensions and retention mounting points",
+    "module-to-fixture retention and strain relief",
+    "insulating feet and underside through-bolt clearance",
+    "MCU USB connector direction and plug bend radius",
+    "transparent lid material, optical readability and temperature",
+    "button actuator extension; button is inaccessible with this draft lid closed",
+    "material flammability, electrical insulation, touch access and drop testing"
+  ]
+}
